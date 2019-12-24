@@ -123,6 +123,19 @@ public class Graph<T extends Comparable<T>> {
     }
 
     private boolean remove(Entity<T> entityToRemove) {
+        if (entityToRemove == graphHigh) {
+            if (entityToRemove.right == null) {
+                graphHigh = entityToRemove.left;
+            } else if (entityToRemove.left == null) {
+                graphHigh = entityToRemove.right;
+            } else {
+                graphHigh = entityToRemove.right;
+                Entity<T> lowestEntity = findLowest(entityToRemove.right);
+                lowestEntity.left = entityToRemove.left;
+                entityToRemove.left.parent = lowestEntity;
+            }
+            return true;
+        }
         Entity<T> parent = entityToRemove.parent; // todo if entityToRemove is graphHigh
 
         if (entityToRemove.right == null && entityToRemove.left == null) {
